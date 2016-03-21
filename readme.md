@@ -46,15 +46,15 @@
  +  --- DMA Engine support                                                                                           
 [ ]   DMA Engine debugging                                                                                      
 *** DMA Devices ***                                                                                     
-[ ]   ARM PrimeCell PL080 or PL081 support                                                                   
-< >   Synopsys DesignWare AHB DMA support                                                                      
-< >   Synopsys DesignWare AHB DMA platform driver                                                             
-< >   Synopsys DesignWare AHB DMA PCI driver                                                                     
-<*>   DMA API Driver for PL330                                                                                  
-< >   Freescale eDMA engine support                                                                              
-`[*]` Xilinx DMA Engines                                                                      
-	`<M>` Xilinx AXI VDMA Engine                                                                                    
-< >   Renesas Type-AXI NBPF DMA support                                                                         
+ [ ]   ARM PrimeCell PL080 or PL081 support                                                                   
+ < >   Synopsys DesignWare AHB DMA support                                                                      
+ < >   Synopsys DesignWare AHB DMA platform driver                                                             
+ < >   Synopsys DesignWare AHB DMA PCI driver                                                                     
+`<*>`  DMA API Driver for PL330                                                                                  
+ < >   Freescale eDMA engine support                                                                              
+`[*]` Xilinx DMA Engines                                                                  
+`<M>` Xilinx AXI VDMA Engine                                                                                    
+ < >	  Renesas Type-AXI NBPF DMA support                                                                          
 *** DMA Clients ***                                                                                       
 [ ]   Async_tx: Offload support for the async_tx api                                                           
 < >   DMA Test client       
