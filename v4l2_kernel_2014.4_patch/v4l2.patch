@@ -1,0 +1,1300 @@
+diff --git a/drivers/dma/xilinx/xilinx_vdma.c b/drivers/dma/xilinx/xilinx_vdma.c
+index 4a3a8f3..bf97876 100644
+--- a/drivers/dma/xilinx/xilinx_vdma.c
++++ b/drivers/dma/xilinx/xilinx_vdma.c
+@@ -138,6 +138,8 @@
+ /* Delay loop counter to prevent hardware failure */
+ #define XILINX_VDMA_LOOP_COUNT		1000000
+ 
++#define PRINTK_INFO printk("%s\n", __FUNCTION__);
++
+ /**
+  * struct xilinx_vdma_desc_hw - Hardware Descriptor
+  * @next_desc: Next Descriptor Pointer @0x00
+@@ -310,7 +312,7 @@ xilinx_vdma_alloc_tx_segment(struct xilinx_vdma_chan *chan)
+ {
+ 	struct xilinx_vdma_tx_segment *segment;
+ 	dma_addr_t phys;
+-
++	PRINTK_INFO
+ 	segment = dma_pool_alloc(chan->desc_pool, GFP_ATOMIC, &phys);
+ 	if (!segment)
+ 		return NULL;
+@@ -341,9 +343,10 @@ static void xilinx_vdma_free_tx_segment(struct xilinx_vdma_chan *chan,
+ static struct xilinx_vdma_tx_descriptor *
+ xilinx_vdma_alloc_tx_descriptor(struct xilinx_vdma_chan *chan)
+ {
++	
+ 	struct xilinx_vdma_tx_descriptor *desc;
+ 	unsigned long flags;
+-
++	PRINTK_INFO
+ 	if (chan->allocated_desc)
+ 		return chan->allocated_desc;
+ 
+@@ -370,7 +373,7 @@ xilinx_vdma_free_tx_descriptor(struct xilinx_vdma_chan *chan,
+ 			       struct xilinx_vdma_tx_descriptor *desc)
+ {
+ 	struct xilinx_vdma_tx_segment *segment, *next;
+-
++	PRINTK_INFO
+ 	if (!desc)
+ 		return;
+ 
+@@ -393,7 +396,7 @@ static void xilinx_vdma_free_desc_list(struct xilinx_vdma_chan *chan,
+ 					struct list_head *list)
+ {
+ 	struct xilinx_vdma_tx_descriptor *desc, *next;
+-
++	PRINTK_INFO
+ 	list_for_each_entry_safe(desc, next, list, node) {
+ 		list_del(&desc->node);
+ 		xilinx_vdma_free_tx_descriptor(chan, desc);
+@@ -407,7 +410,7 @@ static void xilinx_vdma_free_desc_list(struct xilinx_vdma_chan *chan,
+ static void xilinx_vdma_free_descriptors(struct xilinx_vdma_chan *chan)
+ {
+ 	unsigned long flags;
+-
++	PRINTK_INFO
+ 	spin_lock_irqsave(&chan->lock, flags);
+ 
+ 	xilinx_vdma_free_desc_list(chan, &chan->pending_list);
+@@ -426,7 +429,7 @@ static void xilinx_vdma_free_descriptors(struct xilinx_vdma_chan *chan)
+ static void xilinx_vdma_free_chan_resources(struct dma_chan *dchan)
+ {
+ 	struct xilinx_vdma_chan *chan = to_xilinx_chan(dchan);
+-
++	PRINTK_INFO
+ 	dev_dbg(chan->dev, "Free all channel resources.\n");
+ 
+ 	xilinx_vdma_free_descriptors(chan);
+@@ -442,7 +445,7 @@ static void xilinx_vdma_chan_desc_cleanup(struct xilinx_vdma_chan *chan)
+ {
+ 	struct xilinx_vdma_tx_descriptor *desc, *next;
+ 	unsigned long flags;
+-
++	PRINTK_INFO
+ 	spin_lock_irqsave(&chan->lock, flags);
+ 
+ 	list_for_each_entry_safe(desc, next, &chan->done_list, node) {
+@@ -476,7 +479,7 @@ static void xilinx_vdma_chan_desc_cleanup(struct xilinx_vdma_chan *chan)
+ static void xilinx_vdma_do_tasklet(unsigned long data)
+ {
+ 	struct xilinx_vdma_chan *chan = (struct xilinx_vdma_chan *)data;
+-
++	PRINTK_INFO
+ 	xilinx_vdma_chan_desc_cleanup(chan);
+ }
+ 
+@@ -489,7 +492,7 @@ static void xilinx_vdma_do_tasklet(unsigned long data)
+ static int xilinx_vdma_alloc_chan_resources(struct dma_chan *dchan)
+ {
+ 	struct xilinx_vdma_chan *chan = to_xilinx_chan(dchan);
+-
++	PRINTK_INFO
+ 	/* Has this channel already been allocated? */
+ 	if (chan->desc_pool)
+ 		return 0;
+@@ -525,6 +528,7 @@ static enum dma_status xilinx_vdma_tx_status(struct dma_chan *dchan,
+ 					dma_cookie_t cookie,
+ 					struct dma_tx_state *txstate)
+ {
++	PRINTK_INFO
+ 	return dma_cookie_status(dchan, cookie, txstate);
+ }
+ 
+@@ -561,7 +565,7 @@ static bool xilinx_vdma_is_idle(struct xilinx_vdma_chan *chan)
+ static void xilinx_vdma_halt(struct xilinx_vdma_chan *chan)
+ {
+ 	int loop = XILINX_VDMA_LOOP_COUNT;
+-
++	PRINTK_INFO
+ 	vdma_ctrl_clr(chan, XILINX_VDMA_REG_DMACR, XILINX_VDMA_DMACR_RUNSTOP);
+ 
+ 	/* Wait for the hardware to halt */
+@@ -587,7 +591,7 @@ static void xilinx_vdma_halt(struct xilinx_vdma_chan *chan)
+ static void xilinx_vdma_start(struct xilinx_vdma_chan *chan)
+ {
+ 	int loop = XILINX_VDMA_LOOP_COUNT;
+-
++	PRINTK_INFO
+ 	vdma_ctrl_set(chan, XILINX_VDMA_REG_DMACR, XILINX_VDMA_DMACR_RUNSTOP);
+ 
+ 	/* Wait for the hardware to start */
+@@ -618,7 +622,7 @@ static void xilinx_vdma_start_transfer(struct xilinx_vdma_chan *chan)
+ 	unsigned long flags;
+ 	u32 reg;
+ 	struct xilinx_vdma_tx_segment *head, *tail = NULL;
+-
++	PRINTK_INFO
+ 	if (chan->err)
+ 		return;
+ 
+@@ -695,6 +699,7 @@ static void xilinx_vdma_start_transfer(struct xilinx_vdma_chan *chan)
+ 	/* Start the transfer */
+ 	if (chan->has_sg) {
+ 		vdma_ctrl_write(chan, XILINX_VDMA_REG_TAILDESC, tail->phys);
++		printk("vdma sg mode\n");
+ 	} else {
+ 		struct xilinx_vdma_tx_segment *segment, *last = NULL;
+ 		int i = 0;
+@@ -711,9 +716,12 @@ static void xilinx_vdma_start_transfer(struct xilinx_vdma_chan *chan)
+ 
+ 		/* HW expects these parameters to be same for one transaction */
+ 		vdma_desc_write(chan, XILINX_VDMA_REG_HSIZE, last->hw.hsize);
++		printk("hsize:%08x  %08x\n", last->hw.hsize, vdma_read(chan, chan->desc_offset + XILINX_VDMA_REG_HSIZE));
+ 		vdma_desc_write(chan, XILINX_VDMA_REG_FRMDLY_STRIDE,
+ 				last->hw.stride);
+ 		vdma_desc_write(chan, XILINX_VDMA_REG_VSIZE, last->hw.vsize);
++		printk("vsize:%08x  %08x\n", last->hw.vsize, vdma_read(chan, chan->desc_offset + XILINX_VDMA_REG_VSIZE));
++		printk("offset:%08x\n", chan->desc_offset + XILINX_VDMA_REG_VSIZE);
+ 	}
+ 
+ 	list_del(&desc->node);
+@@ -744,7 +752,7 @@ static void xilinx_vdma_complete_descriptor(struct xilinx_vdma_chan *chan)
+ {
+ 	struct xilinx_vdma_tx_descriptor *desc;
+ 	unsigned long flags;
+-
++	PRINTK_INFO
+ 	spin_lock_irqsave(&chan->lock, flags);
+ 
+ 	desc = chan->active_desc;
+@@ -772,7 +780,7 @@ static int xilinx_vdma_reset(struct xilinx_vdma_chan *chan)
+ {
+ 	int loop = XILINX_VDMA_LOOP_COUNT;
+ 	u32 tmp;
+-
++	PRINTK_INFO
+ 	vdma_ctrl_set(chan, XILINX_VDMA_REG_DMACR, XILINX_VDMA_DMACR_RESET);
+ 
+ 	tmp = vdma_ctrl_read(chan, XILINX_VDMA_REG_DMACR) &
+@@ -805,16 +813,17 @@ static int xilinx_vdma_reset(struct xilinx_vdma_chan *chan)
+ static int xilinx_vdma_chan_reset(struct xilinx_vdma_chan *chan)
+ {
+ 	int err;
+-
++	printk("xilinx_vdma_chan_reset\n");
+ 	/* Reset VDMA */
++	
+ 	err = xilinx_vdma_reset(chan);
+ 	if (err)
+ 		return err;
+ 
+-	/* Enable interrupts */
++	// Enable interrupts 
+ 	vdma_ctrl_set(chan, XILINX_VDMA_REG_DMACR,
+ 		      XILINX_VDMA_DMAXR_ALL_IRQ_MASK);
+-
++	
+ 	return 0;
+ }
+ 
+@@ -829,7 +838,7 @@ static irqreturn_t xilinx_vdma_irq_handler(int irq, void *data)
+ {
+ 	struct xilinx_vdma_chan *chan = data;
+ 	u32 status;
+-
++	PRINTK_INFO
+ 	/* Read the status and ack the interrupts. */
+ 	status = vdma_ctrl_read(chan, XILINX_VDMA_REG_DMASR);
+ 	if (!(status & XILINX_VDMA_DMAXR_ALL_IRQ_MASK))
+@@ -891,7 +900,7 @@ static dma_cookie_t xilinx_vdma_tx_submit(struct dma_async_tx_descriptor *tx)
+ 	dma_cookie_t cookie;
+ 	unsigned long flags;
+ 	int err;
+-
++	PRINTK_INFO
+ 	if (chan->err) {
+ 		/*
+ 		 * If reset fails, need to hard reset the system.
+@@ -935,7 +944,7 @@ xilinx_vdma_dma_prep_interleaved(struct dma_chan *dchan,
+ 	struct xilinx_vdma_tx_descriptor *desc;
+ 	struct xilinx_vdma_tx_segment *segment, *prev = NULL;
+ 	struct xilinx_vdma_desc_hw *hw;
+-
++	PRINTK_INFO
+ 	if (!is_slave_direction(xt->dir))
+ 		return NULL;
+ 
+@@ -1003,6 +1012,7 @@ error:
+  */
+ static void xilinx_vdma_terminate_all(struct xilinx_vdma_chan *chan)
+ {
++	PRINTK_INFO
+ 	/* Halt the DMA engine */
+ 	xilinx_vdma_halt(chan);
+ 
+@@ -1028,7 +1038,7 @@ int xilinx_vdma_channel_set_config(struct dma_chan *dchan,
+ {
+ 	struct xilinx_vdma_chan *chan = to_xilinx_chan(dchan);
+ 	u32 dmacr;
+-
++	PRINTK_INFO
+ 	if (cfg->reset)
+ 		return xilinx_vdma_chan_reset(chan);
+ 
+@@ -1075,6 +1085,58 @@ int xilinx_vdma_channel_set_config(struct dma_chan *dchan,
+ }
+ EXPORT_SYMBOL(xilinx_vdma_channel_set_config);
+ 
++int xilinx_vdma_channel_set_config_by_J(struct xilinx_vdma_chan *chan,
++					struct xilinx_vdma_config *cfg)
++{
++
++	u32 dmacr;
++	PRINTK_INFO
++	if (cfg->reset)
++		return xilinx_vdma_chan_reset(chan);
++
++	dmacr = vdma_ctrl_read(chan, XILINX_VDMA_REG_DMACR);
++
++	chan->config.frm_dly = cfg->frm_dly;
++	chan->config.park = cfg->park;
++
++	/* genlock settings */
++	chan->config.gen_lock = cfg->gen_lock;
++	chan->config.master = cfg->master;
++
++	if (cfg->gen_lock && chan->genlock) {
++		dmacr |= XILINX_VDMA_DMACR_GENLOCK_EN;
++		dmacr |= cfg->master << XILINX_VDMA_DMACR_MASTER_SHIFT;
++	}
++
++	chan->config.frm_cnt_en = cfg->frm_cnt_en;
++	if (cfg->park)
++		chan->config.park_frm = cfg->park_frm;
++	else
++		chan->config.park_frm = -1;
++
++	chan->config.coalesc = cfg->coalesc;
++	chan->config.delay = cfg->delay;
++
++	if (cfg->coalesc <= XILINX_VDMA_DMACR_FRAME_COUNT_MAX) {
++		dmacr |= cfg->coalesc << XILINX_VDMA_DMACR_FRAME_COUNT_SHIFT;
++		chan->config.coalesc = cfg->coalesc;
++	}
++
++	if (cfg->delay <= XILINX_VDMA_DMACR_DELAY_MAX) {
++		dmacr |= cfg->delay << XILINX_VDMA_DMACR_DELAY_SHIFT;
++		chan->config.delay = cfg->delay;
++	}
++
++	/* FSync Source selection */
++	dmacr &= ~XILINX_VDMA_DMACR_FSYNCSRC_MASK;
++	dmacr |= cfg->ext_fsync << XILINX_VDMA_DMACR_FSYNCSRC_SHIFT;
++
++	vdma_ctrl_write(chan, XILINX_VDMA_REG_DMACR, dmacr);
++
++	return 0;
++}
++
++
+ /**
+  * xilinx_vdma_device_control - Configure DMA channel of the device
+  * @dchan: DMA Channel pointer
+@@ -1087,12 +1149,22 @@ static int xilinx_vdma_device_control(struct dma_chan *dchan,
+ 				      enum dma_ctrl_cmd cmd, unsigned long arg)
+ {
+ 	struct xilinx_vdma_chan *chan = to_xilinx_chan(dchan);
+-
+-	if (cmd != DMA_TERMINATE_ALL)
++	printk("xilinx_vdma_device_control\n");
++	if (cmd != DMA_TERMINATE_ALL && cmd != DMA_SLAVE_CONFIG)
+ 		return -ENXIO;
+-
+-	xilinx_vdma_terminate_all(chan);
+-
++    switch(cmd)
++    {
++        case DMA_TERMINATE_ALL:     
++	        xilinx_vdma_terminate_all(chan);
++			printk("DMA_TERMINATE_ALL\n");
++            break;
++        case DMA_SLAVE_CONFIG:
++            xilinx_vdma_channel_set_config(dchan, (struct xilinx_vdma_config *)arg);
++			printk("DMA_SLAVE_CONFIG\n");
++            break;
++        default:
++            return -ENXIO;
++    }
+ 	return 0;
+ }
+ 
+@@ -1109,7 +1181,7 @@ static void xilinx_vdma_chan_remove(struct xilinx_vdma_chan *chan)
+ 	/* Disable all interrupts */
+ 	vdma_ctrl_clr(chan, XILINX_VDMA_REG_DMACR,
+ 		      XILINX_VDMA_DMAXR_ALL_IRQ_MASK);
+-
++	PRINTK_INFO
+ 	if (chan->irq > 0)
+ 		free_irq(chan->irq, chan);
+ 
+@@ -1135,7 +1207,7 @@ static int xilinx_vdma_chan_probe(struct xilinx_vdma_device *xdev,
+ 	bool has_dre = false;
+ 	u32 value, width;
+ 	int err;
+-
++	PRINTK_INFO
+ 	/* Allocate and initialize the channel structure */
+ 	chan = devm_kzalloc(xdev->dev, sizeof(*chan), GFP_KERNEL);
+ 	if (!chan)
+@@ -1238,7 +1310,7 @@ static struct dma_chan *of_dma_xilinx_xlate(struct of_phandle_args *dma_spec,
+ {
+ 	struct xilinx_vdma_device *xdev = ofdma->of_dma_data;
+ 	int chan_id = dma_spec->args[0];
+-
++	PRINTK_INFO
+ 	if (chan_id >= XILINX_VDMA_MAX_CHANS_PER_DEVICE)
+ 		return NULL;
+ 
+@@ -1259,7 +1331,7 @@ static int xilinx_vdma_probe(struct platform_device *pdev)
+ 	struct resource *io;
+ 	u32 num_frames;
+ 	int i, err;
+-
++	PRINTK_INFO
+ 	/* Allocate and initialize the DMA engine structure */
+ 	xdev = devm_kzalloc(&pdev->dev, sizeof(*xdev), GFP_KERNEL);
+ 	if (!xdev)
+@@ -1269,6 +1341,7 @@ static int xilinx_vdma_probe(struct platform_device *pdev)
+ 
+ 	/* Request and map I/O memory */
+ 	io = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	printk("baseaddr:%08x\n", io->start);
+ 	xdev->regs = devm_ioremap_resource(&pdev->dev, io);
+ 	if (IS_ERR(xdev->regs))
+ 		return PTR_ERR(xdev->regs);
+@@ -1350,7 +1423,7 @@ static int xilinx_vdma_remove(struct platform_device *pdev)
+ {
+ 	struct xilinx_vdma_device *xdev = platform_get_drvdata(pdev);
+ 	int i;
+-
++	PRINTK_INFO
+ 	of_dma_controller_free(pdev->dev.of_node);
+ 
+ 	dma_async_device_unregister(&xdev->common);
+diff --git a/drivers/gpu/drm/nouveau/nvif/class.h b/drivers/gpu/drm/nouveau/nvif/class.h
+index 573491f..f1ac485 100644
+--- a/drivers/gpu/drm/nouveau/nvif/class.h
++++ b/drivers/gpu/drm/nouveau/nvif/class.h
+@@ -1,558 +1 @@
+-#ifndef __NVIF_CLASS_H__
+-#define __NVIF_CLASS_H__
+-
+-/*******************************************************************************
+- * class identifiers
+- ******************************************************************************/
+-
+-/* the below match nvidia-assigned (either in hw, or sw) class numbers */
+-#define NV_DEVICE                                                    0x00000080
+-
+-#define NV_DMA_FROM_MEMORY                                           0x00000002
+-#define NV_DMA_TO_MEMORY                                             0x00000003
+-#define NV_DMA_IN_MEMORY                                             0x0000003d
+-
+-#define NV04_DISP                                                    0x00000046
+-
+-#define NV03_CHANNEL_DMA                                             0x0000006b
+-#define NV10_CHANNEL_DMA                                             0x0000006e
+-#define NV17_CHANNEL_DMA                                             0x0000176e
+-#define NV40_CHANNEL_DMA                                             0x0000406e
+-#define NV50_CHANNEL_DMA                                             0x0000506e
+-#define G82_CHANNEL_DMA                                              0x0000826e
+-
+-#define NV50_CHANNEL_GPFIFO                                          0x0000506f
+-#define G82_CHANNEL_GPFIFO                                           0x0000826f
+-#define FERMI_CHANNEL_GPFIFO                                         0x0000906f
+-#define KEPLER_CHANNEL_GPFIFO_A                                      0x0000a06f
+-
+-#define NV50_DISP                                                    0x00005070
+-#define G82_DISP                                                     0x00008270
+-#define GT200_DISP                                                   0x00008370
+-#define GT214_DISP                                                   0x00008570
+-#define GT206_DISP                                                   0x00008870
+-#define GF110_DISP                                                   0x00009070
+-#define GK104_DISP                                                   0x00009170
+-#define GK110_DISP                                                   0x00009270
+-#define GM107_DISP                                                   0x00009470
+-
+-#define NV50_DISP_CURSOR                                             0x0000507a
+-#define G82_DISP_CURSOR                                              0x0000827a
+-#define GT214_DISP_CURSOR                                            0x0000857a
+-#define GF110_DISP_CURSOR                                            0x0000907a
+-#define GK104_DISP_CURSOR                                            0x0000917a
+-
+-#define NV50_DISP_OVERLAY                                            0x0000507b
+-#define G82_DISP_OVERLAY                                             0x0000827b
+-#define GT214_DISP_OVERLAY                                           0x0000857b
+-#define GF110_DISP_OVERLAY                                           0x0000907b
+-#define GK104_DISP_OVERLAY                                           0x0000917b
+-
+-#define NV50_DISP_BASE_CHANNEL_DMA                                   0x0000507c
+-#define G82_DISP_BASE_CHANNEL_DMA                                    0x0000827c
+-#define GT200_DISP_BASE_CHANNEL_DMA                                  0x0000837c
+-#define GT214_DISP_BASE_CHANNEL_DMA                                  0x0000857c
+-#define GF110_DISP_BASE_CHANNEL_DMA                                  0x0000907c
+-#define GK104_DISP_BASE_CHANNEL_DMA                                  0x0000917c
+-#define GK110_DISP_BASE_CHANNEL_DMA                                  0x0000927c
+-
+-#define NV50_DISP_CORE_CHANNEL_DMA                                   0x0000507d
+-#define G82_DISP_CORE_CHANNEL_DMA                                    0x0000827d
+-#define GT200_DISP_CORE_CHANNEL_DMA                                  0x0000837d
+-#define GT214_DISP_CORE_CHANNEL_DMA                                  0x0000857d
+-#define GT206_DISP_CORE_CHANNEL_DMA                                  0x0000887d
+-#define GF110_DISP_CORE_CHANNEL_DMA                                  0x0000907d
+-#define GK104_DISP_CORE_CHANNEL_DMA                                  0x0000917d
+-#define GK110_DISP_CORE_CHANNEL_DMA                                  0x0000927d
+-#define GM107_DISP_CORE_CHANNEL_DMA                                  0x0000947d
+-
+-#define NV50_DISP_OVERLAY_CHANNEL_DMA                                0x0000507e
+-#define G82_DISP_OVERLAY_CHANNEL_DMA                                 0x0000827e
+-#define GT200_DISP_OVERLAY_CHANNEL_DMA                               0x0000837e
+-#define GT214_DISP_OVERLAY_CHANNEL_DMA                               0x0000857e
+-#define GF110_DISP_OVERLAY_CONTROL_DMA                               0x0000907e
+-#define GK104_DISP_OVERLAY_CONTROL_DMA                               0x0000917e
+-
+-#define FERMI_A                                                      0x00009097
+-#define FERMI_B                                                      0x00009197
+-#define FERMI_C                                                      0x00009297
+-
+-#define KEPLER_A                                                     0x0000a097
+-#define KEPLER_B                                                     0x0000a197
+-#define KEPLER_C                                                     0x0000a297
+-
+-#define MAXWELL_A                                                    0x0000b097
+-
+-#define FERMI_COMPUTE_A                                              0x000090c0
+-#define FERMI_COMPUTE_B                                              0x000091c0
+-
+-#define KEPLER_COMPUTE_A                                             0x0000a0c0
+-#define KEPLER_COMPUTE_B                                             0x0000a1c0
+-
+-#define MAXWELL_COMPUTE_A                                            0x0000b0c0
+-
+-
+-/*******************************************************************************
+- * client
+- ******************************************************************************/
+-
+-#define NV_CLIENT_DEVLIST                                                  0x00
+-
+-struct nv_client_devlist_v0 {
+-	__u8  version;
+-	__u8  count;
+-	__u8  pad02[6];
+-	__u64 device[];
+-};
+-
+-
+-/*******************************************************************************
+- * device
+- ******************************************************************************/
+-
+-struct nv_device_v0 {
+-	__u8  version;
+-	__u8  pad01[7];
+-	__u64 device;	/* device identifier, ~0 for client default */
+-#define NV_DEVICE_V0_DISABLE_IDENTIFY                     0x0000000000000001ULL
+-#define NV_DEVICE_V0_DISABLE_MMIO                         0x0000000000000002ULL
+-#define NV_DEVICE_V0_DISABLE_VBIOS                        0x0000000000000004ULL
+-#define NV_DEVICE_V0_DISABLE_CORE                         0x0000000000000008ULL
+-#define NV_DEVICE_V0_DISABLE_DISP                         0x0000000000010000ULL
+-#define NV_DEVICE_V0_DISABLE_FIFO                         0x0000000000020000ULL
+-#define NV_DEVICE_V0_DISABLE_GRAPH                        0x0000000100000000ULL
+-#define NV_DEVICE_V0_DISABLE_MPEG                         0x0000000200000000ULL
+-#define NV_DEVICE_V0_DISABLE_ME                           0x0000000400000000ULL
+-#define NV_DEVICE_V0_DISABLE_VP                           0x0000000800000000ULL
+-#define NV_DEVICE_V0_DISABLE_CRYPT                        0x0000001000000000ULL
+-#define NV_DEVICE_V0_DISABLE_BSP                          0x0000002000000000ULL
+-#define NV_DEVICE_V0_DISABLE_PPP                          0x0000004000000000ULL
+-#define NV_DEVICE_V0_DISABLE_COPY0                        0x0000008000000000ULL
+-#define NV_DEVICE_V0_DISABLE_COPY1                        0x0000010000000000ULL
+-#define NV_DEVICE_V0_DISABLE_VIC                          0x0000020000000000ULL
+-#define NV_DEVICE_V0_DISABLE_VENC                         0x0000040000000000ULL
+-	__u64 disable;	/* disable particular subsystems */
+-	__u64 debug0;	/* as above, but *internal* ids, and *NOT* ABI */
+-};
+-
+-#define NV_DEVICE_V0_INFO                                                  0x00
+-
+-struct nv_device_info_v0 {
+-	__u8  version;
+-#define NV_DEVICE_INFO_V0_IGP                                              0x00
+-#define NV_DEVICE_INFO_V0_PCI                                              0x01
+-#define NV_DEVICE_INFO_V0_AGP                                              0x02
+-#define NV_DEVICE_INFO_V0_PCIE                                             0x03
+-#define NV_DEVICE_INFO_V0_SOC                                              0x04
+-	__u8  platform;
+-	__u16 chipset;	/* from NV_PMC_BOOT_0 */
+-	__u8  revision;	/* from NV_PMC_BOOT_0 */
+-#define NV_DEVICE_INFO_V0_TNT                                              0x01
+-#define NV_DEVICE_INFO_V0_CELSIUS                                          0x02
+-#define NV_DEVICE_INFO_V0_KELVIN                                           0x03
+-#define NV_DEVICE_INFO_V0_RANKINE                                          0x04
+-#define NV_DEVICE_INFO_V0_CURIE                                            0x05
+-#define NV_DEVICE_INFO_V0_TESLA                                            0x06
+-#define NV_DEVICE_INFO_V0_FERMI                                            0x07
+-#define NV_DEVICE_INFO_V0_KEPLER                                           0x08
+-#define NV_DEVICE_INFO_V0_MAXWELL                                          0x09
+-	__u8  family;
+-	__u8  pad06[2];
+-	__u64 ram_size;
+-	__u64 ram_user;
+-};
+-
+-
+-/*******************************************************************************
+- * context dma
+- ******************************************************************************/
+-
+-struct nv_dma_v0 {
+-	__u8  version;
+-#define NV_DMA_V0_TARGET_VM                                                0x00
+-#define NV_DMA_V0_TARGET_VRAM                                              0x01
+-#define NV_DMA_V0_TARGET_PCI                                               0x02
+-#define NV_DMA_V0_TARGET_PCI_US                                            0x03
+-#define NV_DMA_V0_TARGET_AGP                                               0x04
+-	__u8  target;
+-#define NV_DMA_V0_ACCESS_VM                                                0x00
+-#define NV_DMA_V0_ACCESS_RD                                                0x01
+-#define NV_DMA_V0_ACCESS_WR                                                0x02
+-#define NV_DMA_V0_ACCESS_RDWR                 (NV_DMA_V0_ACCESS_RD | NV_DMA_V0_ACCESS_WR)
+-	__u8  access;
+-	__u8  pad03[5];
+-	__u64 start;
+-	__u64 limit;
+-	/* ... chipset-specific class data */
+-};
+-
+-struct nv50_dma_v0 {
+-	__u8  version;
+-#define NV50_DMA_V0_PRIV_VM                                                0x00
+-#define NV50_DMA_V0_PRIV_US                                                0x01
+-#define NV50_DMA_V0_PRIV__S                                                0x02
+-	__u8  priv;
+-#define NV50_DMA_V0_PART_VM                                                0x00
+-#define NV50_DMA_V0_PART_256                                               0x01
+-#define NV50_DMA_V0_PART_1KB                                               0x02
+-	__u8  part;
+-#define NV50_DMA_V0_COMP_NONE                                              0x00
+-#define NV50_DMA_V0_COMP_1                                                 0x01
+-#define NV50_DMA_V0_COMP_2                                                 0x02
+-#define NV50_DMA_V0_COMP_VM                                                0x03
+-	__u8  comp;
+-#define NV50_DMA_V0_KIND_PITCH                                             0x00
+-#define NV50_DMA_V0_KIND_VM                                                0x7f
+-	__u8  kind;
+-	__u8  pad05[3];
+-};
+-
+-struct gf100_dma_v0 {
+-	__u8  version;
+-#define GF100_DMA_V0_PRIV_VM                                               0x00
+-#define GF100_DMA_V0_PRIV_US                                               0x01
+-#define GF100_DMA_V0_PRIV__S                                               0x02
+-	__u8  priv;
+-#define GF100_DMA_V0_KIND_PITCH                                            0x00
+-#define GF100_DMA_V0_KIND_VM                                               0xff
+-	__u8  kind;
+-	__u8  pad03[5];
+-};
+-
+-struct gf110_dma_v0 {
+-	__u8  version;
+-#define GF110_DMA_V0_PAGE_LP                                               0x00
+-#define GF110_DMA_V0_PAGE_SP                                               0x01
+-	__u8  page;
+-#define GF110_DMA_V0_KIND_PITCH                                            0x00
+-#define GF110_DMA_V0_KIND_VM                                               0xff
+-	__u8  kind;
+-	__u8  pad03[5];
+-};
+-
+-
+-/*******************************************************************************
+- * perfmon
+- ******************************************************************************/
+-
+-struct nvif_perfctr_v0 {
+-	__u8  version;
+-	__u8  pad01[1];
+-	__u16 logic_op;
+-	__u8  pad04[4];
+-	char  name[4][64];
+-};
+-
+-#define NVIF_PERFCTR_V0_QUERY                                              0x00
+-#define NVIF_PERFCTR_V0_SAMPLE                                             0x01
+-#define NVIF_PERFCTR_V0_READ                                               0x02
+-
+-struct nvif_perfctr_query_v0 {
+-	__u8  version;
+-	__u8  pad01[3];
+-	__u32 iter;
+-	char  name[64];
+-};
+-
+-struct nvif_perfctr_sample {
+-};
+-
+-struct nvif_perfctr_read_v0 {
+-	__u8  version;
+-	__u8  pad01[7];
+-	__u32 ctr;
+-	__u32 clk;
+-};
+-
+-
+-/*******************************************************************************
+- * device control
+- ******************************************************************************/
+-
+-#define NVIF_CONTROL_PSTATE_INFO                                           0x00
+-#define NVIF_CONTROL_PSTATE_ATTR                                           0x01
+-#define NVIF_CONTROL_PSTATE_USER                                           0x02
+-
+-struct nvif_control_pstate_info_v0 {
+-	__u8  version;
+-	__u8  count; /* out: number of power states */
+-#define NVIF_CONTROL_PSTATE_INFO_V0_USTATE_DISABLE                         (-1)
+-#define NVIF_CONTROL_PSTATE_INFO_V0_USTATE_PERFMON                         (-2)
+-	__s8  ustate_ac; /* out: target pstate index */
+-	__s8  ustate_dc; /* out: target pstate index */
+-	__s8  pwrsrc; /* out: current power source */
+-#define NVIF_CONTROL_PSTATE_INFO_V0_PSTATE_UNKNOWN                         (-1)
+-#define NVIF_CONTROL_PSTATE_INFO_V0_PSTATE_PERFMON                         (-2)
+-	__s8  pstate; /* out: current pstate index */
+-	__u8  pad06[2];
+-};
+-
+-struct nvif_control_pstate_attr_v0 {
+-	__u8  version;
+-#define NVIF_CONTROL_PSTATE_ATTR_V0_STATE_CURRENT                          (-1)
+-	__s8  state; /*  in: index of pstate to query
+-		      * out: pstate identifier
+-		      */
+-	__u8  index; /*  in: index of attribute to query
+-		      * out: index of next attribute, or 0 if no more
+-		      */
+-	__u8  pad03[5];
+-	__u32 min;
+-	__u32 max;
+-	char  name[32];
+-	char  unit[16];
+-};
+-
+-struct nvif_control_pstate_user_v0 {
+-	__u8  version;
+-#define NVIF_CONTROL_PSTATE_USER_V0_STATE_UNKNOWN                          (-1)
+-#define NVIF_CONTROL_PSTATE_USER_V0_STATE_PERFMON                          (-2)
+-	__s8  ustate; /*  in: pstate identifier */
+-	__s8  pwrsrc; /*  in: target power source */
+-	__u8  pad03[5];
+-};
+-
+-
+-/*******************************************************************************
+- * DMA FIFO channels
+- ******************************************************************************/
+-
+-struct nv03_channel_dma_v0 {
+-	__u8  version;
+-	__u8  chid;
+-	__u8  pad02[2];
+-	__u32 pushbuf;
+-	__u64 offset;
+-};
+-
+-#define G82_CHANNEL_DMA_V0_NTFY_UEVENT                                     0x00
+-
+-/*******************************************************************************
+- * GPFIFO channels
+- ******************************************************************************/
+-
+-struct nv50_channel_gpfifo_v0 {
+-	__u8  version;
+-	__u8  chid;
+-	__u8  pad01[6];
+-	__u32 pushbuf;
+-	__u32 ilength;
+-	__u64 ioffset;
+-};
+-
+-struct kepler_channel_gpfifo_a_v0 {
+-	__u8  version;
+-#define KEPLER_CHANNEL_GPFIFO_A_V0_ENGINE_GR                               0x01
+-#define KEPLER_CHANNEL_GPFIFO_A_V0_ENGINE_VP                               0x02
+-#define KEPLER_CHANNEL_GPFIFO_A_V0_ENGINE_PPP                              0x04
+-#define KEPLER_CHANNEL_GPFIFO_A_V0_ENGINE_BSP                              0x08
+-#define KEPLER_CHANNEL_GPFIFO_A_V0_ENGINE_CE0                              0x10
+-#define KEPLER_CHANNEL_GPFIFO_A_V0_ENGINE_CE1                              0x20
+-#define KEPLER_CHANNEL_GPFIFO_A_V0_ENGINE_ENC                              0x40
+-	__u8  engine;
+-	__u16 chid;
+-	__u8  pad04[4];
+-	__u32 pushbuf;
+-	__u32 ilength;
+-	__u64 ioffset;
+-};
+-
+-/*******************************************************************************
+- * legacy display
+- ******************************************************************************/
+-
+-#define NV04_DISP_NTFY_VBLANK                                              0x00
+-#define NV04_DISP_NTFY_CONN                                                0x01
+-
+-struct nv04_disp_mthd_v0 {
+-	__u8  version;
+-#define NV04_DISP_SCANOUTPOS                                               0x00
+-	__u8  method;
+-	__u8  head;
+-	__u8  pad03[5];
+-};
+-
+-struct nv04_disp_scanoutpos_v0 {
+-	__u8  version;
+-	__u8  pad01[7];
+-	__s64 time[2];
+-	__u16 vblanks;
+-	__u16 vblanke;
+-	__u16 vtotal;
+-	__u16 vline;
+-	__u16 hblanks;
+-	__u16 hblanke;
+-	__u16 htotal;
+-	__u16 hline;
+-};
+-
+-/*******************************************************************************
+- * display
+- ******************************************************************************/
+-
+-#define NV50_DISP_MTHD                                                     0x00
+-
+-struct nv50_disp_mthd_v0 {
+-	__u8  version;
+-#define NV50_DISP_SCANOUTPOS                                               0x00
+-	__u8  method;
+-	__u8  head;
+-	__u8  pad03[5];
+-};
+-
+-struct nv50_disp_mthd_v1 {
+-	__u8  version;
+-#define NV50_DISP_MTHD_V1_DAC_PWR                                          0x10
+-#define NV50_DISP_MTHD_V1_DAC_LOAD                                         0x11
+-#define NV50_DISP_MTHD_V1_SOR_PWR                                          0x20
+-#define NV50_DISP_MTHD_V1_SOR_HDA_ELD                                      0x21
+-#define NV50_DISP_MTHD_V1_SOR_HDMI_PWR                                     0x22
+-#define NV50_DISP_MTHD_V1_SOR_LVDS_SCRIPT                                  0x23
+-#define NV50_DISP_MTHD_V1_SOR_DP_PWR                                       0x24
+-#define NV50_DISP_MTHD_V1_PIOR_PWR                                         0x30
+-	__u8  method;
+-	__u16 hasht;
+-	__u16 hashm;
+-	__u8  pad06[2];
+-};
+-
+-struct nv50_disp_dac_pwr_v0 {
+-	__u8  version;
+-	__u8  state;
+-	__u8  data;
+-	__u8  vsync;
+-	__u8  hsync;
+-	__u8  pad05[3];
+-};
+-
+-struct nv50_disp_dac_load_v0 {
+-	__u8  version;
+-	__u8  load;
+-	__u8  pad02[2];
+-	__u32 data;
+-};
+-
+-struct nv50_disp_sor_pwr_v0 {
+-	__u8  version;
+-	__u8  state;
+-	__u8  pad02[6];
+-};
+-
+-struct nv50_disp_sor_hda_eld_v0 {
+-	__u8  version;
+-	__u8  pad01[7];
+-	__u8  data[];
+-};
+-
+-struct nv50_disp_sor_hdmi_pwr_v0 {
+-	__u8  version;
+-	__u8  state;
+-	__u8  max_ac_packet;
+-	__u8  rekey;
+-	__u8  pad04[4];
+-};
+-
+-struct nv50_disp_sor_lvds_script_v0 {
+-	__u8  version;
+-	__u8  pad01[1];
+-	__u16 script;
+-	__u8  pad04[4];
+-};
+-
+-struct nv50_disp_sor_dp_pwr_v0 {
+-	__u8  version;
+-	__u8  state;
+-	__u8  pad02[6];
+-};
+-
+-struct nv50_disp_pior_pwr_v0 {
+-	__u8  version;
+-	__u8  state;
+-	__u8  type;
+-	__u8  pad03[5];
+-};
+-
+-/* core */
+-struct nv50_disp_core_channel_dma_v0 {
+-	__u8  version;
+-	__u8  pad01[3];
+-	__u32 pushbuf;
+-};
+-
+-/* cursor immediate */
+-struct nv50_disp_cursor_v0 {
+-	__u8  version;
+-	__u8  head;
+-	__u8  pad02[6];
+-};
+-
+-/* base */
+-struct nv50_disp_base_channel_dma_v0 {
+-	__u8  version;
+-	__u8  pad01[2];
+-	__u8  head;
+-	__u32 pushbuf;
+-};
+-
+-/* overlay */
+-struct nv50_disp_overlay_channel_dma_v0 {
+-	__u8  version;
+-	__u8  pad01[2];
+-	__u8  head;
+-	__u32 pushbuf;
+-};
+-
+-/* overlay immediate */
+-struct nv50_disp_overlay_v0 {
+-	__u8  version;
+-	__u8  head;
+-	__u8  pad02[6];
+-};
+-
+-
+-/*******************************************************************************
+- * fermi
+- ******************************************************************************/
+-
+-#define FERMI_A_ZBC_COLOR                                                  0x00
+-#define FERMI_A_ZBC_DEPTH                                                  0x01
+-
+-struct fermi_a_zbc_color_v0 {
+-	__u8  version;
+-#define FERMI_A_ZBC_COLOR_V0_FMT_ZERO                                      0x01
+-#define FERMI_A_ZBC_COLOR_V0_FMT_UNORM_ONE                                 0x02
+-#define FERMI_A_ZBC_COLOR_V0_FMT_RF32_GF32_BF32_AF32                       0x04
+-#define FERMI_A_ZBC_COLOR_V0_FMT_R16_G16_B16_A16                           0x08
+-#define FERMI_A_ZBC_COLOR_V0_FMT_RN16_GN16_BN16_AN16                       0x0c
+-#define FERMI_A_ZBC_COLOR_V0_FMT_RS16_GS16_BS16_AS16                       0x10
+-#define FERMI_A_ZBC_COLOR_V0_FMT_RU16_GU16_BU16_AU16                       0x14
+-#define FERMI_A_ZBC_COLOR_V0_FMT_RF16_GF16_BF16_AF16                       0x16
+-#define FERMI_A_ZBC_COLOR_V0_FMT_A8R8G8B8                                  0x18
+-#define FERMI_A_ZBC_COLOR_V0_FMT_A8RL8GL8BL8                               0x1c
+-#define FERMI_A_ZBC_COLOR_V0_FMT_A2B10G10R10                               0x20
+-#define FERMI_A_ZBC_COLOR_V0_FMT_AU2BU10GU10RU10                           0x24
+-#define FERMI_A_ZBC_COLOR_V0_FMT_A8B8G8R8                                  0x28
+-#define FERMI_A_ZBC_COLOR_V0_FMT_A8BL8GL8RL8                               0x2c
+-#define FERMI_A_ZBC_COLOR_V0_FMT_AN8BN8GN8RN8                              0x30
+-#define FERMI_A_ZBC_COLOR_V0_FMT_AS8BS8GS8RS8                              0x34
+-#define FERMI_A_ZBC_COLOR_V0_FMT_AU8BU8GU8RU8                              0x38
+-#define FERMI_A_ZBC_COLOR_V0_FMT_A2R10G10B10                               0x3c
+-#define FERMI_A_ZBC_COLOR_V0_FMT_BF10GF11RF11                              0x40
+-	__u8  format;
+-	__u8  index;
+-	__u8  pad03[5];
+-	__u32 ds[4];
+-	__u32 l2[4];
+-};
+-
+-struct fermi_a_zbc_depth_v0 {
+-	__u8  version;
+-#define FERMI_A_ZBC_DEPTH_V0_FMT_FP32                                      0x01
+-	__u8  format;
+-	__u8  index;
+-	__u8  pad03[5];
+-	__u32 ds;
+-	__u32 l2;
+-};
+-
+-#endif
++../../../nvif/class.h
+\ No newline at end of file
+diff --git a/drivers/gpu/drm/nouveau/nvif/event.h b/drivers/gpu/drm/nouveau/nvif/event.h
+index 2176449..1b79853 100644
+--- a/drivers/gpu/drm/nouveau/nvif/event.h
++++ b/drivers/gpu/drm/nouveau/nvif/event.h
+@@ -1,62 +1 @@
+-#ifndef __NVIF_EVENT_H__
+-#define __NVIF_EVENT_H__
+-
+-struct nvif_notify_req_v0 {
+-	__u8  version;
+-	__u8  reply;
+-	__u8  pad02[5];
+-#define NVIF_NOTIFY_V0_ROUTE_NVIF                                          0x00
+-	__u8  route;
+-	__u64 token;	/* must be unique */
+-	__u8  data[];	/* request data (below) */
+-};
+-
+-struct nvif_notify_rep_v0 {
+-	__u8  version;
+-	__u8  pad01[6];
+-	__u8  route;
+-	__u64 token;
+-	__u8  data[];	/* reply data (below) */
+-};
+-
+-struct nvif_notify_head_req_v0 {
+-	/* nvif_notify_req ... */
+-	__u8  version;
+-	__u8  head;
+-	__u8  pad02[6];
+-};
+-
+-struct nvif_notify_head_rep_v0 {
+-	/* nvif_notify_rep ... */
+-	__u8  version;
+-	__u8  pad01[7];
+-};
+-
+-struct nvif_notify_conn_req_v0 {
+-	/* nvif_notify_req ... */
+-	__u8  version;
+-#define NVIF_NOTIFY_CONN_V0_PLUG                                           0x01
+-#define NVIF_NOTIFY_CONN_V0_UNPLUG                                         0x02
+-#define NVIF_NOTIFY_CONN_V0_IRQ                                            0x04
+-#define NVIF_NOTIFY_CONN_V0_ANY                                            0x07
+-	__u8  mask;
+-	__u8  conn;
+-	__u8  pad03[5];
+-};
+-
+-struct nvif_notify_conn_rep_v0 {
+-	/* nvif_notify_rep ... */
+-	__u8  version;
+-	__u8  mask;
+-	__u8  pad02[6];
+-};
+-
+-struct nvif_notify_uevent_req {
+-	/* nvif_notify_req ... */
+-};
+-
+-struct nvif_notify_uevent_rep {
+-	/* nvif_notify_rep ... */
+-};
+-
+-#endif
++../../../nvif/event.h
+\ No newline at end of file
+diff --git a/drivers/gpu/drm/nouveau/nvif/ioctl.h b/drivers/gpu/drm/nouveau/nvif/ioctl.h
+index 4cd8e32..8569c86 100644
+--- a/drivers/gpu/drm/nouveau/nvif/ioctl.h
++++ b/drivers/gpu/drm/nouveau/nvif/ioctl.h
+@@ -1,128 +1 @@
+-#ifndef __NVIF_IOCTL_H__
+-#define __NVIF_IOCTL_H__
+-
+-struct nvif_ioctl_v0 {
+-	__u8  version;
+-#define NVIF_IOCTL_V0_OWNER_NVIF                                           0x00
+-#define NVIF_IOCTL_V0_OWNER_ANY                                            0xff
+-	__u8  owner;
+-#define NVIF_IOCTL_V0_NOP                                                  0x00
+-#define NVIF_IOCTL_V0_SCLASS                                               0x01
+-#define NVIF_IOCTL_V0_NEW                                                  0x02
+-#define NVIF_IOCTL_V0_DEL                                                  0x03
+-#define NVIF_IOCTL_V0_MTHD                                                 0x04
+-#define NVIF_IOCTL_V0_RD                                                   0x05
+-#define NVIF_IOCTL_V0_WR                                                   0x06
+-#define NVIF_IOCTL_V0_MAP                                                  0x07
+-#define NVIF_IOCTL_V0_UNMAP                                                0x08
+-#define NVIF_IOCTL_V0_NTFY_NEW                                             0x09
+-#define NVIF_IOCTL_V0_NTFY_DEL                                             0x0a
+-#define NVIF_IOCTL_V0_NTFY_GET                                             0x0b
+-#define NVIF_IOCTL_V0_NTFY_PUT                                             0x0c
+-	__u8  type;
+-	__u8  path_nr;
+-#define NVIF_IOCTL_V0_ROUTE_NVIF                                           0x00
+-#define NVIF_IOCTL_V0_ROUTE_HIDDEN                                         0xff
+-	__u8  pad04[3];
+-	__u8  route;
+-	__u64 token;
+-	__u32 path[8];		/* in reverse */
+-	__u8  data[];		/* ioctl data (below) */
+-};
+-
+-struct nvif_ioctl_nop {
+-};
+-
+-struct nvif_ioctl_sclass_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  count;
+-	__u8  pad02[6];
+-	__u32 oclass[];
+-};
+-
+-struct nvif_ioctl_new_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  pad01[6];
+-	__u8  route;
+-	__u64 token;
+-	__u32 handle;
+-/* these class numbers are made up by us, and not nvidia-assigned */
+-#define NVIF_IOCTL_NEW_V0_PERFCTR                                    0x0000ffff
+-#define NVIF_IOCTL_NEW_V0_CONTROL                                    0x0000fffe
+-	__u32 oclass;
+-	__u8  data[];		/* class data (class.h) */
+-};
+-
+-struct nvif_ioctl_del {
+-};
+-
+-struct nvif_ioctl_rd_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  size;
+-	__u8  pad02[2];
+-	__u32 data;
+-	__u64 addr;
+-};
+-
+-struct nvif_ioctl_wr_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  size;
+-	__u8  pad02[2];
+-	__u32 data;
+-	__u64 addr;
+-};
+-
+-struct nvif_ioctl_map_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  pad01[3];
+-	__u32 length;
+-	__u64 handle;
+-};
+-
+-struct nvif_ioctl_unmap {
+-};
+-
+-struct nvif_ioctl_ntfy_new_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  event;
+-	__u8  index;
+-	__u8  pad03[5];
+-	__u8  data[];		/* event request data (event.h) */
+-};
+-
+-struct nvif_ioctl_ntfy_del_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  index;
+-	__u8  pad02[6];
+-};
+-
+-struct nvif_ioctl_ntfy_get_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  index;
+-	__u8  pad02[6];
+-};
+-
+-struct nvif_ioctl_ntfy_put_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  index;
+-	__u8  pad02[6];
+-};
+-
+-struct nvif_ioctl_mthd_v0 {
+-	/* nvif_ioctl ... */
+-	__u8  version;
+-	__u8  method;
+-	__u8  pad02[6];
+-	__u8  data[];		/* method data (class.h) */
+-};
+-
+-#endif
++../../../nvif/ioctl.h
+\ No newline at end of file
+diff --git a/drivers/gpu/drm/nouveau/nvif/unpack.h b/drivers/gpu/drm/nouveau/nvif/unpack.h
+index 5933188..69d9929 100644
+--- a/drivers/gpu/drm/nouveau/nvif/unpack.h
++++ b/drivers/gpu/drm/nouveau/nvif/unpack.h
+@@ -1,24 +1 @@
+-#ifndef __NVIF_UNPACK_H__
+-#define __NVIF_UNPACK_H__
+-
+-#define nvif_unvers(d) ({                                                      \
+-	ret = (size == sizeof(d)) ? 0 : -ENOSYS;                               \
+-	(ret == 0);                                                            \
+-})
+-
+-#define nvif_unpack(d,vl,vh,m) ({                                              \
+-	if ((vl) == 0 || ret == -ENOSYS) {                                     \
+-		int _size = sizeof(d);                                         \
+-		if (_size <= size && (d).version >= (vl) &&                    \
+-				     (d).version <= (vh)) {                    \
+-			data = (u8 *)data + _size;                             \
+-			size = size - _size;                                   \
+-			ret = ((m) || !size) ? 0 : -E2BIG;                     \
+-		} else {                                                       \
+-			ret = -ENOSYS;                                         \
+-		}                                                              \
+-	}                                                                      \
+-	(ret == 0);                                                            \
+-})
+-
+-#endif
++../../../nvif/unpack.h
+\ No newline at end of file
+diff --git a/drivers/media/platform/xilinx/xilinx-dma.c b/drivers/media/platform/xilinx/xilinx-dma.c
+index d79fecd..2684d73 100644
+--- a/drivers/media/platform/xilinx/xilinx-dma.c
++++ b/drivers/media/platform/xilinx/xilinx-dma.c
+@@ -27,9 +27,9 @@
+ #include "xilinx-vip.h"
+ #include "xilinx-vipp.h"
+ 
+-#define XVIP_DMA_DEF_FORMAT		V4L2_PIX_FMT_YUYV
+-#define XVIP_DMA_DEF_WIDTH		1920
+-#define XVIP_DMA_DEF_HEIGHT		1080
++#define XVIP_DMA_DEF_FORMAT		V4L2_PIX_FMT_RGB24
++#define XVIP_DMA_DEF_WIDTH		1280
++#define XVIP_DMA_DEF_HEIGHT		960
+ 
+ /* Minimum and maximum widths are expressed in bytes */
+ #define XVIP_DMA_MIN_WIDTH		1U
+diff --git a/drivers/media/platform/xilinx/xilinx-scaler.c b/drivers/media/platform/xilinx/xilinx-scaler.c
+index 4fa244a..3e271c9 100644
+--- a/drivers/media/platform/xilinx/xilinx-scaler.c
++++ b/drivers/media/platform/xilinx/xilinx-scaler.c
+@@ -26,6 +26,12 @@
+ 
+ #include "xilinx-vip.h"
+ 
++
++#define XSCALER_DEF_WIDTH		1280
++#define XSCALER_DEF_HEIGHT		960
++
++
++
+ #define XSCALER_MIN_WIDTH			32
+ #define XSCALER_MAX_WIDTH			4096
+ #define XSCALER_MIN_HEIGHT			32
+@@ -562,7 +568,6 @@ static int xscaler_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	xscaler->xvip.dev = &pdev->dev;
+-
+ 	ret = xscaler_parse_of(xscaler);
+ 	if (ret < 0)
+ 		return ret;
+@@ -574,7 +579,10 @@ static int xscaler_probe(struct platform_device *pdev)
+ 
+ 	/* Reset and initialize the core */
+ 	xvip_reset(&xscaler->xvip);
+-
++    xvip_write(&xscaler->xvip, 0x108, 0x3c00500);
++    xvip_write(&xscaler->xvip, 0x10c, 0x3bf0000);
++    xvip_write(&xscaler->xvip, 0x110, 0x4ff0000);
++    xvip_write(&xscaler->xvip, 0x114, 0x3c00500);
+ 	/* Initialize V4L2 subdevice and media entity */
+ 	subdev = &xscaler->xvip.subdev;
+ 	v4l2_subdev_init(subdev, &xscaler_ops);
+@@ -589,6 +597,17 @@ static int xscaler_probe(struct platform_device *pdev)
+ 	default_format->code = xscaler->vip_format->code;
+ 	default_format->field = V4L2_FIELD_NONE;
+ 	default_format->colorspace = V4L2_COLORSPACE_SRGB;
++	/*
++	xvip_write(&xscaler->xvip, 0x108, 0x3c00500);
++    xvip_write(&xscaler->xvip, 0x10c, 0x3bf0000);
++    xvip_write(&xscaler->xvip, 0x110, 0x4ff0000);
++    xvip_write(&xscaler->xvip, 0x114, 0x3c00500);
++    */
++	xvip_write(&xscaler->xvip, 0x108, (XSCALER_DEF_HEIGHT<<16) | XSCALER_DEF_WIDTH);
++	xvip_write(&xscaler->xvip, 0x10c, (XSCALER_DEF_HEIGHT - 1)<<16);
++	xvip_write(&xscaler->xvip, 0x110, (XSCALER_DEF_WIDTH - 1)<<16);
++	xvip_write(&xscaler->xvip, 0x114, (XSCALER_DEF_HEIGHT<<16) | XSCALER_DEF_WIDTH);
++	
+ 	size = xvip_read(&xscaler->xvip, XSCALER_SOURCE_SIZE);
+ 	default_format->width = (size >> XSCALER_SIZE_HORZ_SHIFT) &
+ 				 XSCALER_SIZE_MASK;
+@@ -596,7 +615,9 @@ static int xscaler_probe(struct platform_device *pdev)
+ 				 XSCALER_SIZE_MASK;
+ 
+ 	xscaler->formats[XVIP_PAD_SINK] = *default_format;
++	printk("XVIP_PAD_SINK:width:%d height:%d\n", default_format->width, default_format->height);
+ 
++	
+ 	default_format = &xscaler->default_formats[XVIP_PAD_SOURCE];
+ 	*default_format = xscaler->default_formats[XVIP_PAD_SINK];
+ 	size = xvip_read(&xscaler->xvip, XSCALER_OUTPUT_SIZE);
+@@ -606,10 +627,13 @@ static int xscaler_probe(struct platform_device *pdev)
+ 				 XSCALER_SIZE_MASK;
+ 
+ 	xscaler->formats[XVIP_PAD_SOURCE] = *default_format;
++	printk("XVIP_PAD_SOURCE:width:%d height:%d\n", default_format->width, default_format->height);
+ 
+ 	xscaler->pads[XVIP_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+ 	xscaler->pads[XVIP_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+ 	subdev->entity.ops = &xscaler_media_ops;
++	
++	
+ 
+ 	ret = media_entity_init(&subdev->entity, 2, xscaler->pads, 0);
+ 	if (ret < 0)
+diff --git a/drivers/media/platform/xilinx/xilinx-vip.c b/drivers/media/platform/xilinx/xilinx-vip.c
+index cba7447..3465039 100644
+--- a/drivers/media/platform/xilinx/xilinx-vip.c
++++ b/drivers/media/platform/xilinx/xilinx-vip.c
+@@ -21,7 +21,8 @@
+  */
+ 
+ static const struct xvip_video_format xvip_video_formats[] = {
+-	{ "rbg", 8, 3, V4L2_MBUS_FMT_RBG888_1X24, 0, NULL },
++	{ "rgb", 8, 3, V4L2_MBUS_FMT_RBG888_1X24, V4L2_PIX_FMT_RGB24, 
++      "RGB24(BE)" },
+ 	{ "xrgb", 8, 4, V4L2_MBUS_FMT_RGB888_1X32_PADHI, V4L2_PIX_FMT_BGR32,
+ 	  "RGB32 (BE)" },
+ 	{ "yuv422", 8, 2, V4L2_MBUS_FMT_UYVY8_1X16, V4L2_PIX_FMT_YUYV,
+@@ -105,11 +106,12 @@ const struct xvip_video_format *xvip_of_get_format(struct device_node *node)
+ 	ret = of_property_read_string(node, "xlnx,axi-video-format", &name);
+ 	if (ret < 0)
+ 		return ERR_PTR(ret);
++	printk("xlnx,axi-video-format:%s\n", name);
+ 
+ 	ret = of_property_read_u32(node, "xlnx,axi-video-width", &width);
+ 	if (ret < 0)
+ 		return ERR_PTR(ret);
+-
++	printk("xlnx,axi-video-width:%d\n", width);
+ 	for (i = 0; i < ARRAY_SIZE(xvip_video_formats); ++i) {
+ 		const struct xvip_video_format *format = &xvip_video_formats[i];
+ 

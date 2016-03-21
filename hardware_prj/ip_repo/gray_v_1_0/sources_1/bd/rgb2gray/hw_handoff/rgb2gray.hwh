@@ -1,0 +1,808 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Sun Oct 18 18:37:02 2015" VIVADOVERSION="2015.2">
+
+  <SYSTEMINFO ARCH="zynq" DEVICE="7z010" NAME="rgb2gray" PACKAGE="clg400" SPEEDGRADE="-1"/>
+
+  <EXTERNALPORTS>
+    <PORT CLKFREQUENCY="10000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="External_Ports_CLK">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="c_addsub_0" PORT="CLK"/>
+        <CONNECTION INSTANCE="c_addsub_1" PORT="CLK"/>
+        <CONNECTION INSTANCE="c_shift_ram_0" PORT="CLK"/>
+        <CONNECTION INSTANCE="c_shift_ram_1" PORT="CLK"/>
+        <CONNECTION INSTANCE="mult_gen_0" PORT="CLK"/>
+        <CONNECTION INSTANCE="mult_gen_1" PORT="CLK"/>
+        <CONNECTION INSTANCE="mult_gen_2" PORT="CLK"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="I" LEFT="23" NAME="vid_in_rgb" RIGHT="0" SIGIS="undef" SIGNAME="External_Ports_vid_in_rgb">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="xlslice_0" PORT="Din"/>
+        <CONNECTION INSTANCE="xlslice_1" PORT="Din"/>
+        <CONNECTION INSTANCE="xlslice_2" PORT="Din"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="I" LEFT="0" NAME="vid_in_hsync" RIGHT="0" SIGIS="undef" SIGNAME="External_Ports_vid_in_hsync">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="c_shift_ram_1" PORT="D"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="I" LEFT="0" NAME="vid_in_vsync" RIGHT="0" SIGIS="undef" SIGNAME="External_Ports_vid_in_vsync">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="c_shift_ram_1" PORT="D"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="I" LEFT="0" NAME="vid_in_active" RIGHT="0" SIGIS="undef" SIGNAME="External_Ports_vid_in_active">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="c_shift_ram_1" PORT="D"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="O" LEFT="7" NAME="vid_out_gray" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_3_Dout">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="xlslice_3" PORT="Dout"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="O" LEFT="0" NAME="vid_out_hsync" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_6_Dout">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="xlslice_6" PORT="Dout"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="O" LEFT="0" NAME="vid_out_vsync" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_5_Dout">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="xlslice_5" PORT="Dout"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="O" LEFT="0" NAME="vid_out_active" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_4_Dout">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="xlslice_4" PORT="Dout"/>
+      </CONNECTIONS>
+    </PORT>
+  </EXTERNALPORTS>
+
+  <EXTERNALINTERFACES/>
+
+  <MODULES>
+    <MODULE FULLNAME="/c_addsub_0" HWVERSION="12.0" INSTANCE="c_addsub_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="c_addsub" VLNV="xilinx.com:ip:c_addsub:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=c_addsub;v=v12_0;d=pg120-c-addsub.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynq"/>
+        <PARAMETER NAME="C_IMPLEMENTATION" VALUE="0"/>
+        <PARAMETER NAME="C_A_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_B_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_OUT_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_CE_OVERRIDES_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_A_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_B_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_LATENCY" VALUE="1"/>
+        <PARAMETER NAME="C_ADD_MODE" VALUE="0"/>
+        <PARAMETER NAME="C_B_CONSTANT" VALUE="0"/>
+        <PARAMETER NAME="C_B_VALUE" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_AINIT_VAL" VALUE="0"/>
+        <PARAMETER NAME="C_SINIT_VAL" VALUE="0"/>
+        <PARAMETER NAME="C_CE_OVERRIDES_BYPASS" VALUE="1"/>
+        <PARAMETER NAME="C_BYPASS_LOW" VALUE="0"/>
+        <PARAMETER NAME="C_SCLR_OVERRIDES_SSET" VALUE="1"/>
+        <PARAMETER NAME="C_HAS_C_IN" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_C_OUT" VALUE="0"/>
+        <PARAMETER NAME="C_BORROW_LOW" VALUE="1"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_BYPASS" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SSET" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SINIT" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_c_addsub_0_0"/>
+        <PARAMETER NAME="Implementation" VALUE="Fabric"/>
+        <PARAMETER NAME="A_Type" VALUE="Unsigned"/>
+        <PARAMETER NAME="B_Type" VALUE="Unsigned"/>
+        <PARAMETER NAME="A_Width" VALUE="16"/>
+        <PARAMETER NAME="B_Width" VALUE="16"/>
+        <PARAMETER NAME="Add_Mode" VALUE="Add"/>
+        <PARAMETER NAME="Out_Width" VALUE="16"/>
+        <PARAMETER NAME="Latency_Configuration" VALUE="Manual"/>
+        <PARAMETER NAME="Latency" VALUE="1"/>
+        <PARAMETER NAME="B_Constant" VALUE="false"/>
+        <PARAMETER NAME="B_Value" VALUE="0000000000000000"/>
+        <PARAMETER NAME="CE" VALUE="false"/>
+        <PARAMETER NAME="C_In" VALUE="false"/>
+        <PARAMETER NAME="C_Out" VALUE="false"/>
+        <PARAMETER NAME="Borrow_Sense" VALUE="Active_Low"/>
+        <PARAMETER NAME="SCLR" VALUE="false"/>
+        <PARAMETER NAME="SSET" VALUE="false"/>
+        <PARAMETER NAME="SINIT" VALUE="false"/>
+        <PARAMETER NAME="SINIT_Value" VALUE="0"/>
+        <PARAMETER NAME="Bypass" VALUE="false"/>
+        <PARAMETER NAME="Bypass_Sense" VALUE="Active_High"/>
+        <PARAMETER NAME="Sync_Ctrl_Priority" VALUE="Reset_Overrides_Set"/>
+        <PARAMETER NAME="Sync_CE_Priority" VALUE="Sync_Overrides_CE"/>
+        <PARAMETER NAME="Bypass_CE_Priority" VALUE="CE_Overrides_Bypass"/>
+        <PARAMETER NAME="AINIT_Value" VALUE="0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="15" NAME="A" RIGHT="0" SIGIS="data" SIGNAME="mult_gen_0_P">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mult_gen_0" PORT="P"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="B" RIGHT="0" SIGIS="data" SIGNAME="mult_gen_1_P">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mult_gen_1" PORT="P"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT CLKFREQUENCY="10000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="External_Ports_CLK">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="CLK"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="S" RIGHT="0" SIGIS="data" SIGNAME="c_addsub_0_S">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_addsub_1" PORT="A"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/c_addsub_1" HWVERSION="12.0" INSTANCE="c_addsub_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="c_addsub" VLNV="xilinx.com:ip:c_addsub:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=c_addsub;v=v12_0;d=pg120-c-addsub.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynq"/>
+        <PARAMETER NAME="C_IMPLEMENTATION" VALUE="0"/>
+        <PARAMETER NAME="C_A_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_B_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_OUT_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_CE_OVERRIDES_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_A_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_B_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_LATENCY" VALUE="1"/>
+        <PARAMETER NAME="C_ADD_MODE" VALUE="0"/>
+        <PARAMETER NAME="C_B_CONSTANT" VALUE="0"/>
+        <PARAMETER NAME="C_B_VALUE" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_AINIT_VAL" VALUE="0"/>
+        <PARAMETER NAME="C_SINIT_VAL" VALUE="0"/>
+        <PARAMETER NAME="C_CE_OVERRIDES_BYPASS" VALUE="1"/>
+        <PARAMETER NAME="C_BYPASS_LOW" VALUE="0"/>
+        <PARAMETER NAME="C_SCLR_OVERRIDES_SSET" VALUE="1"/>
+        <PARAMETER NAME="C_HAS_C_IN" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_C_OUT" VALUE="0"/>
+        <PARAMETER NAME="C_BORROW_LOW" VALUE="1"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_BYPASS" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SSET" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SINIT" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_c_addsub_1_0"/>
+        <PARAMETER NAME="Implementation" VALUE="Fabric"/>
+        <PARAMETER NAME="A_Type" VALUE="Unsigned"/>
+        <PARAMETER NAME="B_Type" VALUE="Unsigned"/>
+        <PARAMETER NAME="A_Width" VALUE="16"/>
+        <PARAMETER NAME="B_Width" VALUE="16"/>
+        <PARAMETER NAME="Add_Mode" VALUE="Add"/>
+        <PARAMETER NAME="Out_Width" VALUE="16"/>
+        <PARAMETER NAME="Latency_Configuration" VALUE="Manual"/>
+        <PARAMETER NAME="Latency" VALUE="1"/>
+        <PARAMETER NAME="B_Constant" VALUE="false"/>
+        <PARAMETER NAME="B_Value" VALUE="0000000000000000"/>
+        <PARAMETER NAME="CE" VALUE="false"/>
+        <PARAMETER NAME="C_In" VALUE="false"/>
+        <PARAMETER NAME="C_Out" VALUE="false"/>
+        <PARAMETER NAME="Borrow_Sense" VALUE="Active_Low"/>
+        <PARAMETER NAME="SCLR" VALUE="false"/>
+        <PARAMETER NAME="SSET" VALUE="false"/>
+        <PARAMETER NAME="SINIT" VALUE="false"/>
+        <PARAMETER NAME="SINIT_Value" VALUE="0"/>
+        <PARAMETER NAME="Bypass" VALUE="false"/>
+        <PARAMETER NAME="Bypass_Sense" VALUE="Active_High"/>
+        <PARAMETER NAME="Sync_Ctrl_Priority" VALUE="Reset_Overrides_Set"/>
+        <PARAMETER NAME="Sync_CE_Priority" VALUE="Sync_Overrides_CE"/>
+        <PARAMETER NAME="Bypass_CE_Priority" VALUE="CE_Overrides_Bypass"/>
+        <PARAMETER NAME="AINIT_Value" VALUE="0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="15" NAME="A" RIGHT="0" SIGIS="data" SIGNAME="c_addsub_0_S">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_addsub_0" PORT="S"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="15" NAME="B" RIGHT="0" SIGIS="data" SIGNAME="c_shift_ram_0_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_shift_ram_0" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT CLKFREQUENCY="10000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="External_Ports_CLK">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="CLK"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="S" RIGHT="0" SIGIS="data" SIGNAME="c_addsub_1_S">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="xlslice_3" PORT="Din"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/c_shift_ram_0" HWVERSION="12.0" INSTANCE="c_shift_ram_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="c_shift_ram" VLNV="xilinx.com:ip:c_shift_ram:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=c_shift_ram;v=v12_0;d=pg122-c-shift-ram.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynq"/>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="C_DEPTH" VALUE="1"/>
+        <PARAMETER NAME="C_ADDR_WIDTH" VALUE="4"/>
+        <PARAMETER NAME="C_SHIFT_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_OPT_GOAL" VALUE="0"/>
+        <PARAMETER NAME="C_AINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_SINIT_VAL" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_DEFAULT_DATA" VALUE="0000000000000000"/>
+        <PARAMETER NAME="C_HAS_A" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="0"/>
+        <PARAMETER NAME="C_REG_LAST_BIT" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_PRIORITY" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_ENABLE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SSET" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SINIT" VALUE="0"/>
+        <PARAMETER NAME="C_MEM_INIT_FILE" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="C_ELABORATION_DIR" VALUE="./"/>
+        <PARAMETER NAME="C_READ_MIF" VALUE="0"/>
+        <PARAMETER NAME="C_PARSER_TYPE" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_c_shift_ram_0_0"/>
+        <PARAMETER NAME="ShiftRegType" VALUE="Fixed_Length"/>
+        <PARAMETER NAME="OptGoal" VALUE="Resources"/>
+        <PARAMETER NAME="RegLastBit" VALUE="true"/>
+        <PARAMETER NAME="CE" VALUE="false"/>
+        <PARAMETER NAME="Width" VALUE="16"/>
+        <PARAMETER NAME="Depth" VALUE="1"/>
+        <PARAMETER NAME="DefaultDataRadix" VALUE="2"/>
+        <PARAMETER NAME="DefaultData" VALUE="0000000000000000"/>
+        <PARAMETER NAME="ReadMifFile" VALUE="false"/>
+        <PARAMETER NAME="MemInitFile" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="AsyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="AsyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SSET" VALUE="false"/>
+        <PARAMETER NAME="SCLR" VALUE="false"/>
+        <PARAMETER NAME="SINIT" VALUE="false"/>
+        <PARAMETER NAME="SyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="SyncInitVal" VALUE="0000000000000000"/>
+        <PARAMETER NAME="SyncCtrlPriority" VALUE="Reset_Overrides_Set"/>
+        <PARAMETER NAME="CEPriority" VALUE="Sync_Overrides_CE"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="15" NAME="D" RIGHT="0" SIGIS="data" SIGNAME="mult_gen_2_P">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mult_gen_2" PORT="P"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT CLKFREQUENCY="10000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="External_Ports_CLK">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="CLK"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="Q" RIGHT="0" SIGIS="data" SIGNAME="c_shift_ram_0_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_addsub_1" PORT="B"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/c_shift_ram_1" HWVERSION="12.0" INSTANCE="c_shift_ram_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="c_shift_ram" VLNV="xilinx.com:ip:c_shift_ram:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=c_shift_ram;v=v12_0;d=pg122-c-shift-ram.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynq"/>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_WIDTH" VALUE="3"/>
+        <PARAMETER NAME="C_DEPTH" VALUE="3"/>
+        <PARAMETER NAME="C_ADDR_WIDTH" VALUE="4"/>
+        <PARAMETER NAME="C_SHIFT_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_OPT_GOAL" VALUE="0"/>
+        <PARAMETER NAME="C_AINIT_VAL" VALUE="000"/>
+        <PARAMETER NAME="C_SINIT_VAL" VALUE="000"/>
+        <PARAMETER NAME="C_DEFAULT_DATA" VALUE="000"/>
+        <PARAMETER NAME="C_HAS_A" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="0"/>
+        <PARAMETER NAME="C_REG_LAST_BIT" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_PRIORITY" VALUE="1"/>
+        <PARAMETER NAME="C_SYNC_ENABLE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SSET" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SINIT" VALUE="0"/>
+        <PARAMETER NAME="C_MEM_INIT_FILE" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="C_ELABORATION_DIR" VALUE="./"/>
+        <PARAMETER NAME="C_READ_MIF" VALUE="0"/>
+        <PARAMETER NAME="C_PARSER_TYPE" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_c_shift_ram_1_0"/>
+        <PARAMETER NAME="ShiftRegType" VALUE="Fixed_Length"/>
+        <PARAMETER NAME="OptGoal" VALUE="Resources"/>
+        <PARAMETER NAME="RegLastBit" VALUE="true"/>
+        <PARAMETER NAME="CE" VALUE="false"/>
+        <PARAMETER NAME="Width" VALUE="3"/>
+        <PARAMETER NAME="Depth" VALUE="3"/>
+        <PARAMETER NAME="DefaultDataRadix" VALUE="2"/>
+        <PARAMETER NAME="DefaultData" VALUE="000"/>
+        <PARAMETER NAME="ReadMifFile" VALUE="false"/>
+        <PARAMETER NAME="MemInitFile" VALUE="no_coe_file_loaded"/>
+        <PARAMETER NAME="AsyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="AsyncInitVal" VALUE="000"/>
+        <PARAMETER NAME="SSET" VALUE="false"/>
+        <PARAMETER NAME="SCLR" VALUE="false"/>
+        <PARAMETER NAME="SINIT" VALUE="false"/>
+        <PARAMETER NAME="SyncInitRadix" VALUE="2"/>
+        <PARAMETER NAME="SyncInitVal" VALUE="000"/>
+        <PARAMETER NAME="SyncCtrlPriority" VALUE="Reset_Overrides_Set"/>
+        <PARAMETER NAME="CEPriority" VALUE="Sync_Overrides_CE"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="2" NAME="D" RIGHT="0" SIGIS="data" SIGNAME="External_Ports_vid_in_active &amp; External_Ports_vid_in_vsync &amp; External_Ports_vid_in_hsync">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_in_active"/>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_in_vsync"/>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_in_hsync"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT CLKFREQUENCY="10000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="External_Ports_CLK">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="CLK"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="2" NAME="Q" RIGHT="0" SIGIS="data" SIGNAME="c_shift_ram_1_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="xlslice_4" PORT="Din"/>
+            <CONNECTION INSTANCE="xlslice_5" PORT="Din"/>
+            <CONNECTION INSTANCE="xlslice_6" PORT="Din"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/mult_gen_0" HWVERSION="12.0" INSTANCE="mult_gen_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="mult_gen" VLNV="xilinx.com:ip:mult_gen:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=mult_gen;v=v12_0;d=pg108-mult-gen.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_MODEL_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_OPTIMIZE_GOAL" VALUE="1"/>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynq"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_LATENCY" VALUE="1"/>
+        <PARAMETER NAME="C_A_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="C_A_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_B_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="C_B_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_OUT_HIGH" VALUE="15"/>
+        <PARAMETER NAME="C_OUT_LOW" VALUE="0"/>
+        <PARAMETER NAME="C_MULT_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_CE_OVERRIDES_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_CCM_IMP" VALUE="0"/>
+        <PARAMETER NAME="C_B_VALUE" VALUE="10000001"/>
+        <PARAMETER NAME="C_HAS_ZERO_DETECT" VALUE="0"/>
+        <PARAMETER NAME="C_ROUND_OUTPUT" VALUE="0"/>
+        <PARAMETER NAME="C_ROUND_PT" VALUE="0"/>
+        <PARAMETER NAME="InternalUser" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_mult_gen_0_0"/>
+        <PARAMETER NAME="MultType" VALUE="Parallel_Multiplier"/>
+        <PARAMETER NAME="PortAType" VALUE="Unsigned"/>
+        <PARAMETER NAME="PortAWidth" VALUE="8"/>
+        <PARAMETER NAME="PortBType" VALUE="Unsigned"/>
+        <PARAMETER NAME="PortBWidth" VALUE="8"/>
+        <PARAMETER NAME="ConstValue" VALUE="129"/>
+        <PARAMETER NAME="CcmImp" VALUE="Distributed_Memory"/>
+        <PARAMETER NAME="Multiplier_Construction" VALUE="Use_LUTs"/>
+        <PARAMETER NAME="OptGoal" VALUE="Speed"/>
+        <PARAMETER NAME="Use_Custom_Output_Width" VALUE="true"/>
+        <PARAMETER NAME="OutputWidthHigh" VALUE="15"/>
+        <PARAMETER NAME="OutputWidthLow" VALUE="0"/>
+        <PARAMETER NAME="UseRounding" VALUE="false"/>
+        <PARAMETER NAME="RoundPoint" VALUE="0"/>
+        <PARAMETER NAME="PipeStages" VALUE="1"/>
+        <PARAMETER NAME="ClockEnable" VALUE="false"/>
+        <PARAMETER NAME="SyncClear" VALUE="false"/>
+        <PARAMETER NAME="SclrCePriority" VALUE="SCLR_Overrides_CE"/>
+        <PARAMETER NAME="ZeroDetect" VALUE="false"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="10000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="External_Ports_CLK">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="CLK"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="7" NAME="A" RIGHT="0" SIGIS="data" SIGNAME="xlslice_0_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="xlslice_0" PORT="Dout"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="7" NAME="B" RIGHT="0" SIGIS="data" SIGNAME="xlconstant_0_dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="xlconstant_0" PORT="dout"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="P" RIGHT="0" SIGIS="data" SIGNAME="mult_gen_0_P">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_addsub_0" PORT="A"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/mult_gen_1" HWVERSION="12.0" INSTANCE="mult_gen_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="mult_gen" VLNV="xilinx.com:ip:mult_gen:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=mult_gen;v=v12_0;d=pg108-mult-gen.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_MODEL_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_OPTIMIZE_GOAL" VALUE="1"/>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynq"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_LATENCY" VALUE="1"/>
+        <PARAMETER NAME="C_A_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="C_A_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_B_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="C_B_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_OUT_HIGH" VALUE="15"/>
+        <PARAMETER NAME="C_OUT_LOW" VALUE="0"/>
+        <PARAMETER NAME="C_MULT_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_CE_OVERRIDES_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_CCM_IMP" VALUE="0"/>
+        <PARAMETER NAME="C_B_VALUE" VALUE="10000001"/>
+        <PARAMETER NAME="C_HAS_ZERO_DETECT" VALUE="0"/>
+        <PARAMETER NAME="C_ROUND_OUTPUT" VALUE="0"/>
+        <PARAMETER NAME="C_ROUND_PT" VALUE="0"/>
+        <PARAMETER NAME="InternalUser" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_mult_gen_1_0"/>
+        <PARAMETER NAME="MultType" VALUE="Parallel_Multiplier"/>
+        <PARAMETER NAME="PortAType" VALUE="Unsigned"/>
+        <PARAMETER NAME="PortAWidth" VALUE="8"/>
+        <PARAMETER NAME="PortBType" VALUE="Unsigned"/>
+        <PARAMETER NAME="PortBWidth" VALUE="8"/>
+        <PARAMETER NAME="ConstValue" VALUE="129"/>
+        <PARAMETER NAME="CcmImp" VALUE="Distributed_Memory"/>
+        <PARAMETER NAME="Multiplier_Construction" VALUE="Use_LUTs"/>
+        <PARAMETER NAME="OptGoal" VALUE="Speed"/>
+        <PARAMETER NAME="Use_Custom_Output_Width" VALUE="true"/>
+        <PARAMETER NAME="OutputWidthHigh" VALUE="15"/>
+        <PARAMETER NAME="OutputWidthLow" VALUE="0"/>
+        <PARAMETER NAME="UseRounding" VALUE="false"/>
+        <PARAMETER NAME="RoundPoint" VALUE="0"/>
+        <PARAMETER NAME="PipeStages" VALUE="1"/>
+        <PARAMETER NAME="ClockEnable" VALUE="false"/>
+        <PARAMETER NAME="SyncClear" VALUE="false"/>
+        <PARAMETER NAME="SclrCePriority" VALUE="SCLR_Overrides_CE"/>
+        <PARAMETER NAME="ZeroDetect" VALUE="false"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="10000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="External_Ports_CLK">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="CLK"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="7" NAME="A" RIGHT="0" SIGIS="data" SIGNAME="xlslice_1_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="xlslice_1" PORT="Dout"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="7" NAME="B" RIGHT="0" SIGIS="data" SIGNAME="xlconstant_1_dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="xlconstant_1" PORT="dout"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="P" RIGHT="0" SIGIS="data" SIGNAME="mult_gen_1_P">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_addsub_0" PORT="B"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/mult_gen_2" HWVERSION="12.0" INSTANCE="mult_gen_2" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="mult_gen" VLNV="xilinx.com:ip:mult_gen:12.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=mult_gen;v=v12_0;d=pg108-mult-gen.pdf"/>
+      </DOCUMENTS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_VERBOSITY" VALUE="0"/>
+        <PARAMETER NAME="C_MODEL_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_OPTIMIZE_GOAL" VALUE="1"/>
+        <PARAMETER NAME="C_XDEVICEFAMILY" VALUE="zynq"/>
+        <PARAMETER NAME="C_HAS_CE" VALUE="0"/>
+        <PARAMETER NAME="C_HAS_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_LATENCY" VALUE="1"/>
+        <PARAMETER NAME="C_A_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="C_A_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_B_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="C_B_TYPE" VALUE="1"/>
+        <PARAMETER NAME="C_OUT_HIGH" VALUE="15"/>
+        <PARAMETER NAME="C_OUT_LOW" VALUE="0"/>
+        <PARAMETER NAME="C_MULT_TYPE" VALUE="0"/>
+        <PARAMETER NAME="C_CE_OVERRIDES_SCLR" VALUE="0"/>
+        <PARAMETER NAME="C_CCM_IMP" VALUE="0"/>
+        <PARAMETER NAME="C_B_VALUE" VALUE="10000001"/>
+        <PARAMETER NAME="C_HAS_ZERO_DETECT" VALUE="0"/>
+        <PARAMETER NAME="C_ROUND_OUTPUT" VALUE="0"/>
+        <PARAMETER NAME="C_ROUND_PT" VALUE="0"/>
+        <PARAMETER NAME="InternalUser" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_mult_gen_2_0"/>
+        <PARAMETER NAME="MultType" VALUE="Parallel_Multiplier"/>
+        <PARAMETER NAME="PortAType" VALUE="Unsigned"/>
+        <PARAMETER NAME="PortAWidth" VALUE="8"/>
+        <PARAMETER NAME="PortBType" VALUE="Unsigned"/>
+        <PARAMETER NAME="PortBWidth" VALUE="8"/>
+        <PARAMETER NAME="ConstValue" VALUE="129"/>
+        <PARAMETER NAME="CcmImp" VALUE="Distributed_Memory"/>
+        <PARAMETER NAME="Multiplier_Construction" VALUE="Use_LUTs"/>
+        <PARAMETER NAME="OptGoal" VALUE="Speed"/>
+        <PARAMETER NAME="Use_Custom_Output_Width" VALUE="true"/>
+        <PARAMETER NAME="OutputWidthHigh" VALUE="15"/>
+        <PARAMETER NAME="OutputWidthLow" VALUE="0"/>
+        <PARAMETER NAME="UseRounding" VALUE="false"/>
+        <PARAMETER NAME="RoundPoint" VALUE="0"/>
+        <PARAMETER NAME="PipeStages" VALUE="1"/>
+        <PARAMETER NAME="ClockEnable" VALUE="false"/>
+        <PARAMETER NAME="SyncClear" VALUE="false"/>
+        <PARAMETER NAME="SclrCePriority" VALUE="SCLR_Overrides_CE"/>
+        <PARAMETER NAME="ZeroDetect" VALUE="false"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="10000000" DIR="I" NAME="CLK" SIGIS="clk" SIGNAME="External_Ports_CLK">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="CLK"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="7" NAME="A" RIGHT="0" SIGIS="data" SIGNAME="xlslice_2_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="xlslice_2" PORT="Dout"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="7" NAME="B" RIGHT="0" SIGIS="data" SIGNAME="xlconstant_2_dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="xlconstant_2" PORT="dout"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="15" NAME="P" RIGHT="0" SIGIS="data" SIGNAME="mult_gen_2_P">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_shift_ram_0" PORT="D"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlconstant_0" HWVERSION="1.1" INSTANCE="xlconstant_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="CONST_VAL" VALUE="01001101"/>
+        <PARAMETER NAME="CONST_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlconstant_0_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="O" LEFT="7" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="xlconstant_0_dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mult_gen_0" PORT="B"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlconstant_1" HWVERSION="1.1" INSTANCE="xlconstant_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="CONST_VAL" VALUE="10010110"/>
+        <PARAMETER NAME="CONST_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlconstant_1_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="O" LEFT="7" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="xlconstant_1_dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mult_gen_1" PORT="B"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlconstant_2" HWVERSION="1.1" INSTANCE="xlconstant_2" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="CONST_VAL" VALUE="00011101"/>
+        <PARAMETER NAME="CONST_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlconstant_2_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="O" LEFT="7" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="xlconstant_2_dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mult_gen_2" PORT="B"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlslice_0" HWVERSION="1.0" INSTANCE="xlslice_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlslice" VLNV="xilinx.com:ip:xlslice:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="DIN_WIDTH" VALUE="24"/>
+        <PARAMETER NAME="DIN_FROM" VALUE="23"/>
+        <PARAMETER NAME="DIN_TO" VALUE="16"/>
+        <PARAMETER NAME="DOUT_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlslice_0_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="23" NAME="Din" RIGHT="0" SIGIS="undef" SIGNAME="External_Ports_vid_in_rgb">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_in_rgb"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="7" NAME="Dout" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_0_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mult_gen_0" PORT="A"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlslice_1" HWVERSION="1.0" INSTANCE="xlslice_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlslice" VLNV="xilinx.com:ip:xlslice:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="DIN_WIDTH" VALUE="24"/>
+        <PARAMETER NAME="DIN_FROM" VALUE="15"/>
+        <PARAMETER NAME="DIN_TO" VALUE="8"/>
+        <PARAMETER NAME="DOUT_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlslice_1_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="23" NAME="Din" RIGHT="0" SIGIS="undef" SIGNAME="External_Ports_vid_in_rgb">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_in_rgb"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="7" NAME="Dout" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_1_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mult_gen_1" PORT="A"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlslice_2" HWVERSION="1.0" INSTANCE="xlslice_2" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlslice" VLNV="xilinx.com:ip:xlslice:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="DIN_WIDTH" VALUE="24"/>
+        <PARAMETER NAME="DIN_FROM" VALUE="7"/>
+        <PARAMETER NAME="DIN_TO" VALUE="0"/>
+        <PARAMETER NAME="DOUT_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlslice_2_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="23" NAME="Din" RIGHT="0" SIGIS="undef" SIGNAME="External_Ports_vid_in_rgb">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_in_rgb"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="7" NAME="Dout" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_2_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="mult_gen_2" PORT="A"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlslice_3" HWVERSION="1.0" INSTANCE="xlslice_3" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlslice" VLNV="xilinx.com:ip:xlslice:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="DIN_WIDTH" VALUE="16"/>
+        <PARAMETER NAME="DIN_FROM" VALUE="15"/>
+        <PARAMETER NAME="DIN_TO" VALUE="8"/>
+        <PARAMETER NAME="DOUT_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlslice_3_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="15" NAME="Din" RIGHT="0" SIGIS="undef" SIGNAME="c_addsub_1_S">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_addsub_1" PORT="S"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="7" NAME="Dout" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_3_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_out_gray"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlslice_4" HWVERSION="1.0" INSTANCE="xlslice_4" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlslice" VLNV="xilinx.com:ip:xlslice:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="DIN_WIDTH" VALUE="3"/>
+        <PARAMETER NAME="DIN_FROM" VALUE="2"/>
+        <PARAMETER NAME="DIN_TO" VALUE="2"/>
+        <PARAMETER NAME="DOUT_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlslice_4_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="2" NAME="Din" RIGHT="0" SIGIS="undef" SIGNAME="c_shift_ram_1_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_shift_ram_1" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="0" NAME="Dout" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_4_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_out_active"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlslice_5" HWVERSION="1.0" INSTANCE="xlslice_5" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlslice" VLNV="xilinx.com:ip:xlslice:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="DIN_WIDTH" VALUE="3"/>
+        <PARAMETER NAME="DIN_FROM" VALUE="1"/>
+        <PARAMETER NAME="DIN_TO" VALUE="1"/>
+        <PARAMETER NAME="DOUT_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlslice_5_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="2" NAME="Din" RIGHT="0" SIGIS="undef" SIGNAME="c_shift_ram_1_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_shift_ram_1" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="0" NAME="Dout" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_5_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_out_vsync"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlslice_6" HWVERSION="1.0" INSTANCE="xlslice_6" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlslice" VLNV="xilinx.com:ip:xlslice:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="DIN_WIDTH" VALUE="3"/>
+        <PARAMETER NAME="DIN_FROM" VALUE="0"/>
+        <PARAMETER NAME="DIN_TO" VALUE="0"/>
+        <PARAMETER NAME="DOUT_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="Component_Name" VALUE="rgb2gray_xlslice_6_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="I" LEFT="2" NAME="Din" RIGHT="0" SIGIS="undef" SIGNAME="c_shift_ram_1_Q">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="c_shift_ram_1" PORT="Q"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="0" NAME="Dout" RIGHT="0" SIGIS="undef" SIGNAME="xlslice_6_Dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="vid_out_hsync"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+  </MODULES>
+
+</EDKSYSTEM>
