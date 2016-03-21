@@ -52,7 +52,7 @@
 < >   Synopsys DesignWare AHB DMA PCI driver                                                                     
 <*>   DMA API Driver for PL330                                                                                  
 < >   Freescale eDMA engine support                                                                              
-`[*]`   Xilinx DMA Engines  --->                                                                               
+`[*]`   Xilinx DMA Engines                                                                               
 `<M>`   Xilinx AXI VDMA Engine                                                                                    
 < >   Renesas Type-AXI NBPF DMA support                                                                         
 *** DMA Clients ***                                                                                       
