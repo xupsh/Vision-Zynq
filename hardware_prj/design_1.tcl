@@ -174,7 +174,7 @@ proc create_root_design { parentCell } {
 
   # Create instance: axi_vdma_0, and set properties
   set axi_vdma_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_vdma_0 ]
-  set_property -dict [ list CONFIG.c_include_mm2s {0} CONFIG.c_m_axi_mm2s_data_width {64} CONFIG.c_m_axis_mm2s_tdata_width {32} CONFIG.c_mm2s_genlock_mode {0} CONFIG.c_mm2s_linebuffer_depth {1024} CONFIG.c_mm2s_max_burst_length {8} CONFIG.c_num_fstores {3} CONFIG.c_s2mm_linebuffer_depth {1024}  ] $axi_vdma_0
+  set_property -dict [ list CONFIG.c_include_mm2s {0} CONFIG.c_m_axi_mm2s_data_width {64} CONFIG.c_m_axis_mm2s_tdata_width {32} CONFIG.c_mm2s_genlock_mode {0} CONFIG.c_mm2s_linebuffer_depth {512} CONFIG.c_mm2s_max_burst_length {8} CONFIG.c_num_fstores {3} CONFIG.c_s2mm_linebuffer_depth {1024}  ] $axi_vdma_0
 
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 clk_wiz_0 ]

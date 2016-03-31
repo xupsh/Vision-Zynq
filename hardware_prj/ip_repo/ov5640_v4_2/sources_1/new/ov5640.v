@@ -118,7 +118,7 @@ module ov5640(
             .out_data(w_cfa_data),
             .out_valid(w_cfa_valid)
     );
-    assign out_data = w_cfa_data;
+	assign out_data = {w_cfa_data[7:0],w_cfa_data[15:8],w_cfa_data[23:16]};
     assign out_vsync = w_controller_vsync;
     assign out_hsync = w_cfa_valid;
     assign out_active = w_cfa_valid;
